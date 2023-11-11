@@ -12,7 +12,7 @@ public class Login extends JFrame implements ActionListener {
         setTitle("AUTOMATED TELLER MACHINE");
 
         setLayout(null);
-        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icons/Logo!.jpg"));
+        ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icons/!Logo.png"));
         Image i2 = i1.getImage().getScaledInstance(100,100,Image.SCALE_DEFAULT);
         ImageIcon i3 = new ImageIcon(i2);
         JLabel label = new JLabel(i3);
