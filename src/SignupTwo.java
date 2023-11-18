@@ -190,6 +190,8 @@ import java.util.Random;
                 Conn c = new Conn();
                 String query = "insert into signupTwo values('" + formno + "', '" + sreligion + "', '" + scategory + "', '" + sincome + "', '" + seducation + "', '" + soocupation + "', '" + pan + "', '" + aadhar + "', '" + seniorcitizen + "', '" + existingaccount + "')";
                 c.s.executeUpdate(query);
+                setVisible(false);
+                new SignupThree(formno).setVisible(true);
 
 
             } catch (Exception e) {
@@ -201,6 +203,7 @@ import java.util.Random;
 
 
         public static void main(String[] args) {
+
             new SignupTwo("");
         }
     }

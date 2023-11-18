@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,9 +10,10 @@ public class SignupThree extends JFrame implements ActionListener {
     JRadioButton save, fd, current, rd;
     JCheckBox c1, c2, c3, c4, c5, c6, c7;
     JButton submit, cancel;
+    String formno;
 
-    SignupThree() {
-
+    SignupThree(String formno) {
+        this.formno =formno;
         setLayout(null);
 
         JLabel l1 = new JLabel("Page 3: Account Details");
@@ -149,8 +151,8 @@ public class SignupThree extends JFrame implements ActionListener {
 
 
         getContentPane().setBackground(Color.WHITE);
-        setSize(850, 800);
-        setLocation(350, 45);
+        setSize(750, 800);
+        setLocation(400, 45);
         setTitle("NEW ACCOUNT APPLICATION FORM PAGE -3");
         setVisible(true);
     }
@@ -189,7 +191,18 @@ public class SignupThree extends JFrame implements ActionListener {
             }
 
             try {
+                 if(accountType.equals("")){
+                     JOptionPane.showMessageDialog(null,"Account Type is Required");
+                 } else {
+                     Conn conn = new Conn();
+                     String query1 = "insert into signupThree values('" + formno + "', '" + accountType + "', '" + cardnumber + "', '" + pinnumber + "', '" + facility + "')";
+                     String query2 = "insert into login values('" + formno + "', '" + cardnumber + "','" + pinnumber + "')";
 
+                     conn.s.executeUpdate(query1);
+                     conn.s.executeUpdate(query2);
+
+                             JOptionPane.showMessageDialog(null,"Card Number: " + cardnumber + "\n Pin: " + pinnumber);
+                 }
             } catch (Exception e) {
                 System.out.println(e);
             }
@@ -200,7 +213,7 @@ public class SignupThree extends JFrame implements ActionListener {
 
 
     public static void main(String[] args) {
-        new SignupThree();
+        new SignupThree("");
     }
 
 }

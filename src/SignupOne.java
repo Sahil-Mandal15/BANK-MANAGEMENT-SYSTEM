@@ -170,6 +170,10 @@ public class SignupOne extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent ae) {
+         if(ae.getSource() == next){
+             setVisible(false);
+             new SignupTwo("").setVisible(true);
+         }
         String formno = "" + random;
         String name = nameTextfield.getText();
         String fname = fnameTextfield.getText();
