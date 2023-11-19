@@ -2,13 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
+import java.util.Date;
 
-public class Transaction extends JFrame implements ActionListener {
+public class FastCash extends JFrame implements ActionListener {
 
     JButton deposit,withdrwal,fastcash,ministatement,pinchange,exit,balanceenquiry;
     String pinnumber;
 
-    Transaction(String pinnumber){
+    FastCash(String pinnumber){
         this.pinnumber = pinnumber;
 
         setLayout(null);
@@ -20,43 +22,43 @@ public class Transaction extends JFrame implements ActionListener {
         image.setBounds(0,0, 900,900);
         add(image);
 
-        JLabel text = new JLabel("Please select your Transaction");
+        JLabel text = new JLabel("Select Withdrawl Amount");
         text.setBounds(220,300,700,35);
         text.setForeground(Color.WHITE);
         text.setFont(new Font("System",Font.BOLD,16));
         image.add(text);
 
-        deposit = new JButton("Deposit");
+        deposit = new JButton("Rs 100");
         deposit.setBounds(170,415,150,30);
         deposit.addActionListener(this);
         image.add(deposit);
 
-        withdrwal = new JButton("Cash Withdrawl");
+        withdrwal = new JButton("Rs 500");
         withdrwal.setBounds(355,415,150,30);
         withdrwal.addActionListener(this);
         image.add(withdrwal);
 
-        fastcash = new JButton("Fast Cash");
+        fastcash = new JButton("Rs 1000");
         fastcash.setBounds(170,450,150,30);
         fastcash.addActionListener(this);
         image.add(fastcash);
 
-        ministatement = new JButton("Print Mini Statement");
+        ministatement = new JButton("Rs 2000");
         ministatement.setBounds(355,450,150,30);
         ministatement.addActionListener(this);
         image.add(ministatement);
 
-        pinchange = new JButton("Change Pin");
+        pinchange = new JButton("Rs 5000");
         pinchange.setBounds(170,485,150,30);
         pinchange.addActionListener(this);
         image.add(pinchange);
 
-        balanceenquiry = new JButton("Balance Enquiry");
+        balanceenquiry = new JButton("Rs 10000");
         balanceenquiry.setBounds(355,485,150,30);
         balanceenquiry.addActionListener(this);
         image.add(balanceenquiry);
 
-        exit = new JButton("Exit");
+        exit = new JButton("Back");
         exit.setBounds(355,520,150,30);
         exit.addActionListener(this);
         image.add(exit);
@@ -76,33 +78,46 @@ public class Transaction extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent ae) {
 
         if(ae.getSource() == exit){
-           System.exit(0);
-        } else if(ae.getSource()== deposit){
-            setVisible(false);
-            new Deposit(pinnumber).setVisible(true);
-        } else if (ae.getSource()== withdrwal){
-            setVisible(false);
-            new Withdrawl(pinnumber).setVisible(true);
-        } else if(ae.getSource()== fastcash){
-            setVisible(false);
-            new FastCash(pinnumber).setVisible(true);
-        } else if(ae.getSource()== pinchange){
             setVisible(false);
             new Transaction(pinnumber).setVisible(true);
-    } else if(ae.getSource()== balanceenquiry){
-            setVisible(false);
-            new BalanceEnquiry(pinnumber).setVisible(true);
-        } else if(ae.getSource()== ministatement) {
-            new MiniStatement(pinnumber).setVisible(true);
-        }
+        } else {
+            String amount = ((JButton)ae.getSource()).getText().substring(3);
+            Conn conn = new Conn();
+            try{
+                ResultSet rs = conn.s.executeQuery("select * from bank where pin = '"+pinnumber+"'");
+                int balance = 0;
+                while(rs.next()){
+                    if(rs.getString("type").equals("Deposit")){
+                        balance += Integer.parseInt(rs.getString("amount"));
+                    } else {
+                        balance -=Integer.parseInt(rs.getString("amount"));
+                    }
+                }
+                if(ae.getSource()!= exit && balance < Integer.parseInt(amount)); {
+                    JOptionPane.showMessageDialog(null, "Insufficient Balance");
+                    setVisible(false);
+                    new Transaction(pinnumber).setVisible(true);
+                }
 
+                Date date = new Date();
+                String query = "insert into bank values('"+pinnumber+"','"+date+"', 'Withdrawl' ,"+amount+"')";
+                conn.s.executeUpdate(query);
+                JOptionPane.showMessageDialog(null, "Rs "+ amount + " Withdrawn Successfully");
+
+                setVisible(false);
+                new Transaction(pinnumber).setVisible(true);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
     }
 
     public static void main(String[] args) {
-        new Transaction("");
+        new FastCash("");
     }
 
 
 
 
 }
+
