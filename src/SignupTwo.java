@@ -13,6 +13,7 @@ import java.util.Random;
         JRadioButton yes, not,eyes, enot;
         JComboBox religion, category, income, occupation, education;
         String formno;
+
         SignupTwo(String formno){
             this.formno = formno;
             setLayout(null);
