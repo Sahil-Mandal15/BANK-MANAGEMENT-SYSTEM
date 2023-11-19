@@ -74,6 +74,7 @@ public class Login extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent ae) {
+
         if(ae.getSource() == clear) {
             cardTextField.setText("");
             pinTextField.setText("");
